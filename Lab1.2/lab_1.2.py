@@ -15,4 +15,7 @@ activity = list(map(getvalue, sheet['D'][1:]))
 
 pyplot.plot(years, temperature, label="Относительная темперетура")
 pyplot.plot(years, activity, label="Активность солнца")
+pyplot.xlabel('Года')
+pyplot.ylabel('Относительная температура/Активность солнца')
+pyplot.legend
 pyplot.show()
