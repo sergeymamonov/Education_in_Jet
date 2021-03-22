@@ -1,0 +1,40 @@
+import glob
+import re
+from ipaddress import IPv4Interface
+
+
+def classify(s):
+    pattern = re.match("^ ip address ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+) ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)", s)
+    if pattern:
+        return {"ip": IPv4Interface(str(pattern.group(1)) + "/" + str(pattern.group(2)))}
+
+    pattern = re.match("^interface (.+)", s)
+    if pattern:
+        return {"int": pattern.group(1)}
+
+    pattern = re.match("^hostname (.+)", s)
+    if pattern:
+        return {"host": pattern.group(1)}
+
+    return {}
+
+
+ip_addresses = []
+interfaces = []
+hosts = []
+
+path = "C:\Study\python\config_files\*.txt"
+for file_name in glob.glob(path):
+    with open(file_name) as file:
+        for current_line in file:
+            find_pattern = classify(current_line)
+            if "ip" in find_pattern:
+                ip_addresses.append(find_pattern)
+            if "int" in find_pattern:
+                interfaces.append(find_pattern)
+            if "host" in find_pattern:
+                hosts.append(find_pattern)
+
+print(ip_addresses)
+print(interfaces)
+print(hosts)
